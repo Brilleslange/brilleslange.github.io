@@ -3,9 +3,417 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <!--For when you add responsive design :) <meta name="viewport" content="width=device-width, intial-scale=1" /> -->
+    <title>Twilight Imperium 4th Edition Color Assigner</title>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/reset.js"></script>
+    <script src="js/randomizer.js"></script>
+    <script src="js/pok.js"></script>
+    <script src="js/scores.js"></script>
+    <script src="js/tica.js"></script>
 </head>
 <body>
-    <p>Hello world!</p>
+    <header>
+        <a href="/"><h1>Twilight Imperium 4th Edition Color Assigner</h1></a>
+    </header>
+    <main>
+        <section class="options">
+            <h2>Options</h2>
+            <h3>Expansions</h3>
+            <input type="checkbox" id="pok" onclick="setPok()" checked /><label for="pok">Prophecy of Kings</label>
+            <h3>Speaker token</h3>
+            <input type="checkbox" id="speaker"  /><label for="speaker">Assign speaker</label>
+            <h3>Avoid color combos</h3>
+            <ul>
+                <li class="pokcombo"><input type="checkbox" id="redora" name="combo" /><label for="redora">Red and Orange</label></li>
+                <li class="pokcombo"><input type="checkbox" id="redpin" name="combo" /><label for="redpin">Red and Pink</label></li>
+                <li class="pokcombo"><input type="checkbox" id="orayel" name="combo" /><label for="orayel">Orange and Yellow</label></li>
+                <li><input type="checkbox" id="blubla" name="combo" /><label for="blubla">Blue and Black</label></li>
+                <li class="pokcombo"><input type="checkbox" id="purpin" name="combo" /><label for="purpin">Purple and Pink</label></li>
+            </ul>
+        </section>
+        <div class="content">
+            <section id="factions">
+                <h2>Factions</h2>
+                <div class="panel">
+                    <ul id="faclist">
+                        <li class="pokfac"><input type="checkbox" id="arg" value="arg" name="fac" /><label for="arg">The Argent Flight</label></li>
+                        <li><input type="checkbox" id="arb" value="arb" name="fac" /><label for="arb">The Arborec</label></li>
+                        <li><input type="checkbox" id="let" value="let" name="fac" /><label for="let">The Barony of Letnev</label></li>
+                        <li><input type="checkbox" id="saa" value="saa" name="fac" /><label for="saa">The Clan of Saar</label></li>
+                        <li><input type="checkbox" id="mua" value="mua" name="fac" /><label for="mua">The Embers of Muaat</label></li>
+                        <li><input type="checkbox" id="hac" value="hac" name="fac" /><label for="hac">The Emirates of Hacan</label></li>
+                        <li class="pokfac"><input type="checkbox" id="emp" value="emp" name="fac" /><label for="emp">The Empyrean</label></li>
+                        <li><input type="checkbox" id="sol" value="sol" name="fac" /><label for="sol">The Federation of Sol</label></li>
+                        <li><input type="checkbox" id="cre" value="cre" name="fac" /><label for="cre">The Ghosts of Creuss</label></li>
+                        <li><input type="checkbox" id="l1z" value="l1z" name="fac" /><label for="l1z">The L1Z1X Mindnet</label></li>
+                        <li class="pokfac"><input type="checkbox" id="mah" value="mah" name="fac" /><label for="mah">The Mahact Gene-Sorcerers</label></li>
+                        <li><input type="checkbox" id="men" value="men" name="fac" /><label for="men">The Mentak Coalition</label></li>
+                        <li><input type="checkbox" id="naa" value="naa" name="fac" /><label for="naa">The Naalu Collective</label></li>
+                        <li class="pokfac"><input type="checkbox" id="rok" value="rok" name="fac" /><label for="rok">The Naaz-Rokha Alliance</label></li>
+                        <li><input type="checkbox" id="nek" value="nek" name="fac" /><label for="nek">The Nekro Virus</label></li>
+                        <li class="pokfac"><input type="checkbox" id="nom" value="nom" name="fac" /><label for="nom">The Nomad</label></li>
+                        <li><input type="checkbox" id="sar" value="sar" name="fac" /><label for="sar">Sardakk N'orr</label></li>
+                        <li class="pokfac"><input type="checkbox" id="ult" value="ult" name="fac" /><label for="ult">The Titans of Ul</label></li>
+                        <li><input type="checkbox" id="jol" value="jol" name="fac" /><label for="jol">The Universities of Jol-Nar</label></li>
+                        <li class="pokfac"><input type="checkbox" id="vui" value="vui" name="fac" /><label for="vui">The Vuil'Raith Cabal</label></li>
+                        <li><input type="checkbox" id="win" value="win" name="fac" /><label for="win">The Winnu</label></li>
+                        <li><input type="checkbox" id="xxc" value="xxc" name="fac" /><label for="xxc">The Xxcha Kingdom</label></li>
+                        <li><input type="checkbox" id="yin" value="yin" name="fac" /><label for="yin">The Yin Brotherhood</label></li>
+                        <li><input type="checkbox" id="yss" value="yss" name="fac" /><label for="yss">The Yssaril Tribes</label></li>
+                        <li class="filler"></li>
+                        <li class="filler"></li>
+                        <li class="filler"></li>
+                        <li class="filler"></li>
+                        <li class="filler"></li>
+                    </ul>
+                    <ul class="buttons">
+                        <li><input type="number" id="ranfac" name="ranfac" min="0" max="24" value="0" /><label for="ranfac">factions</label></li>
+                        <li><button onclick="randomFactions()">Randomize</button></li>
+                        <li><button onclick="resetFactions()">Clear</button></li>
+                    </ul>
+                </div>
+                <hr />
+            </section>
+            <section id="colors">
+                <h2>Colors</h2>
+                <div class="panel">
+                    <table id="col">
+                        <tr id="row1">
+                            <td id="faction1" class="colfac"></td>
+                            <td id="color1" class="colcol"></td>
+                        </tr>
+                        <tr id="row2">
+                            <td id="faction2" class="colfac"></td>
+                            <td id="color2" class="colcol"></td>
+                        </tr>
+                        <tr id="row3">
+                            <td id="faction3" class="colfac"></td>
+                            <td id="color3" class="colcol"></td>
+                        </tr>
+                        <tr id="row4">
+                            <td id="faction4" class="colfac"></td>
+                            <td id="color4" class="colcol"></td>
+                        </tr>
+                        <tr id="row5">
+                            <td id="faction5" class="colfac"></td>
+                            <td id="color5" class="colcol"></td>
+                        </tr>
+                        <tr id="row6">
+                            <td id="faction6" class="colfac"></td>
+                            <td id="color6" class="colcol"></td>
+                        </tr>
+                        <tr id="row7">
+                            <td id="faction7" class="colfac"></td>
+                            <td id="color7" class="colcol"></td>
+                        </tr>
+                        <tr id="row8">
+                            <td id="faction8" class="colfac"></td>
+                            <td id="color8" class="colcol"></td>
+                        </tr>
+                    </table>
+                    <ul class="buttons">
+                        <li><button onclick="assignColors()">Assign colors</button></li>
+                    </ul>
+                </div>
+                <hr />
+            </section>
+            <section id="scores">
+                <h2>Scores</h2>
+                <div class="panel">
+                    <table id="sco">
+                        <tr>
+                            <td></td>
+                            <td>Red</td>
+                            <td class="poktd">Orange</td>
+                            <td>Yellow</td>
+                            <td>Green</td>
+                            <td>Blue</td>
+                            <td>Purple</td>
+                            <td class="poktd">Pink</td>
+                            <td>Black</td>
+                        </tr>
+                        <tr class="poktr">
+                            <td class="scofac">The Argent Flight</td>
+                            <td><input type="number" id="redarg" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oraarg" name="score" value="0" /></td>
+                            <td><input type="number" id="yelarg" name="score" value="0" /></td>
+                            <td><input type="number" id="grearg" name="score" value="0" /></td>
+                            <td><input type="number" id="bluarg" name="score" value="0" /></td>
+                            <td><input type="number" id="purarg" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinarg" name="score" value="0" /></td>
+                            <td><input type="number" id="blaarg" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Arborec</td>
+                            <td><input type="number" id="redarb" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oraarb" name="score" value="0" /></td>
+                            <td><input type="number" id="yelarb" name="score" value="0" /></td>
+                            <td><input type="number" id="grearb" name="score" value="0" /></td>
+                            <td><input type="number" id="bluarb" name="score" value="0" /></td>
+                            <td><input type="number" id="purarb" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinarb" name="score" value="0" /></td>
+                            <td><input type="number" id="blaarb" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Barony of Letnev</td>
+                            <td><input type="number" id="redlet" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oralet" name="score" value="0" /></td>
+                            <td><input type="number" id="yellet" name="score" value="0" /></td>
+                            <td><input type="number" id="grelet" name="score" value="0" /></td>
+                            <td><input type="number" id="blulet" name="score" value="0" /></td>
+                            <td><input type="number" id="purlet" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinlet" name="score" value="0" /></td>
+                            <td><input type="number" id="blalet" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Clan of Saar</td>
+                            <td><input type="number" id="redsaa" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orasaa" name="score" value="0" /></td>
+                            <td><input type="number" id="yelsaa" name="score" value="0" /></td>
+                            <td><input type="number" id="gresaa" name="score" value="0" /></td>
+                            <td><input type="number" id="blusaa" name="score" value="0" /></td>
+                            <td><input type="number" id="pursaa" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinsaa" name="score" value="0" /></td>
+                            <td><input type="number" id="blasaa" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Embers of Muaat</td>
+                            <td><input type="number" id="redmua" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oramua" name="score" value="0" /></td>
+                            <td><input type="number" id="yelmua" name="score" value="0" /></td>
+                            <td><input type="number" id="gremua" name="score" value="0" /></td>
+                            <td><input type="number" id="blumua" name="score" value="0" /></td>
+                            <td><input type="number" id="purmua" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinmua" name="score" value="0" /></td>
+                            <td><input type="number" id="blamua" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Emirates of Hacan</td>
+                            <td><input type="number" id="redhac" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orahac" name="score" value="0" /></td>
+                            <td><input type="number" id="yelhac" name="score" value="0" /></td>
+                            <td><input type="number" id="grehac" name="score" value="0" /></td>
+                            <td><input type="number" id="bluhac" name="score" value="0" /></td>
+                            <td><input type="number" id="purhac" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinhac" name="score" value="0" /></td>
+                            <td><input type="number" id="blahac" name="score" value="0" /></td>
+                        </tr>
+                        <tr class="poktr">
+                            <td class="scofac">The Empyrean</td>
+                            <td><input type="number" id="redemp" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oraemp" name="score" value="0" /></td>
+                            <td><input type="number" id="yelemp" name="score" value="0" /></td>
+                            <td><input type="number" id="greemp" name="score" value="0" /></td>
+                            <td><input type="number" id="bluemp" name="score" value="0" /></td>
+                            <td><input type="number" id="puremp" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinemp" name="score" value="0" /></td>
+                            <td><input type="number" id="blaemp" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Federation of Sol</td>
+                            <td><input type="number" id="redsol" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orasol" name="score" value="0" /></td>
+                            <td><input type="number" id="yelsol" name="score" value="0" /></td>
+                            <td><input type="number" id="gresol" name="score" value="0" /></td>
+                            <td><input type="number" id="blusol" name="score" value="0" /></td>
+                            <td><input type="number" id="pursol" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinsol" name="score" value="0" /></td>
+                            <td><input type="number" id="blasol" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Ghosts of Creuss</td>
+                            <td><input type="number" id="redcre" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oracre" name="score" value="0" /></td>
+                            <td><input type="number" id="yelcre" name="score" value="0" /></td>
+                            <td><input type="number" id="grecre" name="score" value="0" /></td>
+                            <td><input type="number" id="blucre" name="score" value="0" /></td>
+                            <td><input type="number" id="purcre" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pincre" name="score" value="0" /></td>
+                            <td><input type="number" id="blacre" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The L1Z1X Mindnet</td>
+                            <td><input type="number" id="redl1z" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oral1z" name="score" value="0" /></td>
+                            <td><input type="number" id="yell1z" name="score" value="0" /></td>
+                            <td><input type="number" id="grel1z" name="score" value="0" /></td>
+                            <td><input type="number" id="blul1z" name="score" value="0" /></td>
+                            <td><input type="number" id="purl1z" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinl1z" name="score" value="0" /></td>
+                            <td><input type="number" id="blal1z" name="score" value="0" /></td>
+                        </tr>
+                        <tr class="poktr">
+                            <td class="scofac">The Mahact Gene-Sorcerers</td>
+                            <td><input type="number" id="redmah" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oramah" name="score" value="0" /></td>
+                            <td><input type="number" id="yelmah" name="score" value="0" /></td>
+                            <td><input type="number" id="gremah" name="score" value="0" /></td>
+                            <td><input type="number" id="blumah" name="score" value="0" /></td>
+                            <td><input type="number" id="purmah" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinmah" name="score" value="0" /></td>
+                            <td><input type="number" id="blamah" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Mentak Coalition</td>
+                            <td><input type="number" id="redmen" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oramen" name="score" value="0" /></td>
+                            <td><input type="number" id="yelmen" name="score" value="0" /></td>
+                            <td><input type="number" id="gremen" name="score" value="0" /></td>
+                            <td><input type="number" id="blumen" name="score" value="0" /></td>
+                            <td><input type="number" id="purmen" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinmen" name="score" value="0" /></td>
+                            <td><input type="number" id="blamen" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Naalu Collective</td>
+                            <td><input type="number" id="rednaa" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oranaa" name="score" value="0" /></td>
+                            <td><input type="number" id="yelnaa" name="score" value="0" /></td>
+                            <td><input type="number" id="grenaa" name="score" value="0" /></td>
+                            <td><input type="number" id="blunaa" name="score" value="0" /></td>
+                            <td><input type="number" id="purnaa" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinnaa" name="score" value="0" /></td>
+                            <td><input type="number" id="blanaa" name="score" value="0" /></td>
+                        </tr>
+                        <tr class="poktr">
+                            <td class="scofac">The Naaz-Rokha Alliance</td>
+                            <td><input type="number" id="redrok" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orarok" name="score" value="0" /></td>
+                            <td><input type="number" id="yelrok" name="score" value="0" /></td>
+                            <td><input type="number" id="grerok" name="score" value="0" /></td>
+                            <td><input type="number" id="blurok" name="score" value="0" /></td>
+                            <td><input type="number" id="purrok" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinrok" name="score" value="0" /></td>
+                            <td><input type="number" id="blarok" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Nekro Virus</td>
+                            <td><input type="number" id="rednek" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oranek" name="score" value="0" /></td>
+                            <td><input type="number" id="yelnek" name="score" value="0" /></td>
+                            <td><input type="number" id="grenek" name="score" value="0" /></td>
+                            <td><input type="number" id="blunek" name="score" value="0" /></td>
+                            <td><input type="number" id="purnek" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinnek" name="score" value="0" /></td>
+                            <td><input type="number" id="blanek" name="score" value="0" /></td>
+                        </tr>
+                        <tr class="poktr">
+                            <td class="scofac">The Nomad</td>
+                            <td><input type="number" id="rednom" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oranom" name="score" value="0" /></td>
+                            <td><input type="number" id="yelnom" name="score" value="0" /></td>
+                            <td><input type="number" id="grenom" name="score" value="0" /></td>
+                            <td><input type="number" id="blunom" name="score" value="0" /></td>
+                            <td><input type="number" id="purnom" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinnom" name="score" value="0" /></td>
+                            <td><input type="number" id="blanom" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">Sardakk N'orr</td>
+                            <td><input type="number" id="redsar" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orasar" name="score" value="0" /></td>
+                            <td><input type="number" id="yelsar" name="score" value="0" /></td>
+                            <td><input type="number" id="gresar" name="score" value="0" /></td>
+                            <td><input type="number" id="blusar" name="score" value="0" /></td>
+                            <td><input type="number" id="pursar" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinsar" name="score" value="0" /></td>
+                            <td><input type="number" id="blasar" name="score" value="0" /></td>
+                        </tr>
+                        <tr class="poktr">
+                            <td class="scofac">The Titans of Ul</td>
+                            <td><input type="number" id="redult" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orault" name="score" value="0" /></td>
+                            <td><input type="number" id="yelult" name="score" value="0" /></td>
+                            <td><input type="number" id="greult" name="score" value="0" /></td>
+                            <td><input type="number" id="bluult" name="score" value="0" /></td>
+                            <td><input type="number" id="purult" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinult" name="score" value="0" /></td>
+                            <td><input type="number" id="blault" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Universities of Jol-Nar</td>
+                            <td><input type="number" id="redjol" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orajol" name="score" value="0" /></td>
+                            <td><input type="number" id="yeljol" name="score" value="0" /></td>
+                            <td><input type="number" id="grejol" name="score" value="0" /></td>
+                            <td><input type="number" id="blujol" name="score" value="0" /></td>
+                            <td><input type="number" id="purjol" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinjol" name="score" value="0" /></td>
+                            <td><input type="number" id="blajol" name="score" value="0" /></td>
+                        </tr>
+                        <tr class="poktr">
+                            <td class="scofac">The Vuil'Raith Cabal</td>
+                            <td><input type="number" id="redvui" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oravui" name="score" value="0" /></td>
+                            <td><input type="number" id="yelvui" name="score" value="0" /></td>
+                            <td><input type="number" id="grevui" name="score" value="0" /></td>
+                            <td><input type="number" id="bluvui" name="score" value="0" /></td>
+                            <td><input type="number" id="purvui" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinvui" name="score" value="0" /></td>
+                            <td><input type="number" id="blavui" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Winnu</td>
+                            <td><input type="number" id="redwin" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orawin" name="score" value="0" /></td>
+                            <td><input type="number" id="yelwin" name="score" value="0" /></td>
+                            <td><input type="number" id="grewin" name="score" value="0" /></td>
+                            <td><input type="number" id="bluwin" name="score" value="0" /></td>
+                            <td><input type="number" id="purwin" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinwin" name="score" value="0" /></td>
+                            <td><input type="number" id="blawin" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Xxcha Kingdom</td>
+                            <td><input type="number" id="redxxc" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="oraxxc" name="score" value="0" /></td>
+                            <td><input type="number" id="yelxxc" name="score" value="0" /></td>
+                            <td><input type="number" id="grexxc" name="score" value="0" /></td>
+                            <td><input type="number" id="bluxxc" name="score" value="0" /></td>
+                            <td><input type="number" id="purxxc" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinxxc" name="score" value="0" /></td>
+                            <td><input type="number" id="blaxxc" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Yin Brotherhood</td>
+                            <td><input type="number" id="redyin" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orayin" name="score" value="0" /></td>
+                            <td><input type="number" id="yelyin" name="score" value="0" /></td>
+                            <td><input type="number" id="greyin" name="score" value="0" /></td>
+                            <td><input type="number" id="bluyin" name="score" value="0" /></td>
+                            <td><input type="number" id="puryin" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinyin" name="score" value="0" /></td>
+                            <td><input type="number" id="blayin" name="score" value="0" /></td>
+                        </tr>
+                        <tr>
+                            <td class="scofac">The Yssaril Tribes</td>
+                            <td><input type="number" id="redyss" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="orayss" name="score" value="0" /></td>
+                            <td><input type="number" id="yelyss" name="score" value="0" /></td>
+                            <td><input type="number" id="greyss" name="score" value="0" /></td>
+                            <td><input type="number" id="bluyss" name="score" value="0" /></td>
+                            <td><input type="number" id="puryss" name="score" value="0" /></td>
+                            <td class="poktd"><input type="number" id="pinyss" name="score" value="0" /></td>
+                            <td><input type="number" id="blayss" name="score" value="0" /></td>
+                        </tr>
+                    </table>
+                    <ul class="buttons">
+                        <li><button onclick="importScores()">Import</button></li>
+                        <li><button onclick="exportScores()">Export</button></li>
+                        <li><button onclick="defaultScores()">Reset to default</button></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <p><a href="/about.html"><small>About</small></a></p>
+    </footer>
+    <script>resetInput()</script>
+    <script>randomValues()</script>
 </body>
 </html>
