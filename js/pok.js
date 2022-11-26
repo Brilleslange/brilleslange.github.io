@@ -4,6 +4,14 @@ function getPok() {
 }
 
 function setPok() {
+    const exclude = document.getElementsByClassName("pokexclude");
+        for (let e of exclude) {
+            if (getPok()) {
+                e.style.display = "list-item";
+            } else {
+                e.style.display = "none";
+            }
+        }
     const combo = document.getElementsByClassName("pokcombo");
     for (let c of combo) {
         if (getPok()) {

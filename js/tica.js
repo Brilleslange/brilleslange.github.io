@@ -5,6 +5,7 @@ function assignColors() {
         id = "row" + t;
         document.getElementById(id).style.display = "none";
     }
+
     //Find which factions have been selected.
     //If PoK factions have been selected but PoK is unchecked, discard those factions.
     let cb;
@@ -22,6 +23,7 @@ function assignColors() {
         }
     }
     let amount = names.length;
+
     //Validate amount of factions.
     if (amount < 3) {
         alert("Must select 3 or more factions.");
@@ -33,31 +35,7 @@ function assignColors() {
         alert("Must select 8 or fewer factions.");
         throw Error("Must select 8 or fewer factions.");
     }
-    //Create faction list.
-    let factions = new Array();
-    for (n of names) {
-        factions.push(faction(n));
-    }
-    //Generate random faction order.
-    let order = new Array();
-    let a;
-    let i = 0;
-    while (i < amount) {
-        a = getRandomNumber(amount);
-        if (!order.includes(a)) {
-            order.push(a);
-            i++;
-        }
-    }
-    //Add dummies.
-    while (factions.length < 6) {
-        order.push(factions.length);
-        factions.push(dummy("none"));
-    }
-    while (getPok() && factions.length < 8) {
-        order.push(factions.length);
-        factions.push(dummy("pok"));
-    }
+
     //Create color list.
     let colors;
     if (getPok()) {
@@ -65,67 +43,177 @@ function assignColors() {
     } else {
         colors = [0, 2, 3, 4, 5, 7];
     }
-    //Check if color combos can be avoided.
-    let combos = [
-        (getRedOrange() && getPok()),
-        (getRedPink() && getPok()),
-        (getOrangeYellow() && getPok()),
-        getBlueBlack(),
-        (getPurplePink() && getPok())
-    ];
+
+    //Exclude colors.
     let index;
-    if ((!getPok() && amount > 5 && getBlueBlack()) ||
-        (getPok() && amount > 7 && combos.includes(true)) ||
-        (getPok() && amount > 6 && (
-            (getBlueBlack() && (getRedOrange() || getRedPink() || getOrangeYellow() || getPurplePink())) ||
-            (getRedOrange() && getPurplePink()) ||
-            (getRedPink() && getOrangeYellow()) ||
-            (getOrangeYellow() && getPurplePink()))) ||
-        (getPok() && amount > 5 && (
-            (getRedPink() && getOrangeYellow() && getBlueBlack()) ||
-            (getRedOrange() && getRedPink() && getBlueBlack() && (getOrangeYellow() || getPurplePink())))
-        )) {
-        for (let c = 0; c < combos.length; c++) {
-            combos[c] = false;
+    if (getExcludeRed()) {
+        index = colors.indexOf(0);
+        colors.splice(index, 1);
+    }
+    if (getExcludeOrange()) {
+        index = colors.indexOf(1);
+        colors.splice(index, 1);
+    }
+    if (getExcludeYellow()) {
+        index = colors.indexOf(2);
+        colors.splice(index, 1);
+    }
+    if (getExcludeGreen()) {
+        index = colors.indexOf(3);
+        colors.splice(index, 1);
+    }
+    if (getExcludeBlue()) {
+        index = colors.indexOf(4);
+        colors.splice(index, 1);
+    }
+    if (getExcludePurple()) {
+        index = colors.indexOf(5);
+        colors.splice(index, 1);
+    }
+    if (getExcludePink()) {
+        index = colors.indexOf(6);
+        colors.splice(index, 1);
+    }
+    if (getExcludeBlack()) {
+        index = colors.indexOf(7);
+        colors.splice(index, 1);
+    }
+
+    //Check if there are enough remaining colors.
+    if (colors.length < amount){
+        alert("Too many colors excluded.");
+        throw Error("Too many colors excluded.");
+    }
+
+    //Find all possible assignment combinations.
+    let combos = [];
+    function getCombos(temp, start, end, index, r) {
+        if (index == r) {
+            combos.push([...temp]);
+            return;
         }
-        alert("Too many players to avoid color combo(s).")
-    } else if (getPok() && amount > 6 && getRedOrange() && getRedPink()) {
-        setColor(0);
-    } else if (getPok() && amount > 6 && getRedOrange() && getOrangeYellow()) {
-        setColor(1);
-    } else if (getPok() && amount > 6 && getRedPink() && getPurplePink()) {
-        setColor(6);
-    } else if (getPok() && amount > 5 && getRedOrange() && getRedPink() && getOrangeYellow() && getPurplePink()) {
-        setColor(1);
-        setColor(6);
-    } else if (getPok() && amount > 5 && getRedOrange() && getRedPink() && getBlueBlack()) {
-        setColor(0);
-    } else if (getPok() && amount > 5 && getRedOrange() && getOrangeYellow() && (getBlueBlack() || getPurplePink())) {
-        setColor(1);
-    } else if (getPok() && amount > 5 && getRedPink() && (getOrangeYellow() || getBlueBlack()) && getPurplePink()) {
-        setColor(6);
-    } else if (getPok() && amount > 4 && !combos.includes(false)) {
-        setColor(1);
-        setColor(6);
-    } else if (getPok() && amount > 4 && getRedOrange() && getOrangeYellow() && getBlueBlack() && getPurplePink()) {
-        setColor(1);
-    } else if (getPok() && amount > 4 && getRedPink() && getOrangeYellow() && getBlueBlack() && getPurplePink()) {
-        setColor(6);
+        for (let i = start; i <= end && end - i + 1 >= r - index; i++) {
+            temp[index] = colors[i];
+            getCombos(temp, i + 1, end, index + 1, r);
+        }
     }
+    getCombos(new Array(amount), 0, colors.length - 1, 0, amount);
+
+    //Check if color pairs can be avoided.
+    let pairs = [];
+    if (getRedOrange()) pairs.push([0, 1]);
+    if (getRedYellow()) pairs.push([0, 2]);
+    if (getRedGreen()) pairs.push([0, 3]);
+    if (getRedBlue()) pairs.push([0, 4]);
+    if (getRedPurple()) pairs.push([0, 5]);
+    if (getRedPink()) pairs.push([0, 6]);
+    if (getRedBlack()) pairs.push([0, 7]);
+    if (getOrangeYellow()) pairs.push([1, 2]);
+    if (getOrangeGreen()) pairs.push([1, 3]);
+    if (getOrangeBlue()) pairs.push([1, 4]);
+    if (getOrangePurple()) pairs.push([1, 5]);
+    if (getOrangePink()) pairs.push([1, 6]);
+    if (getOrangeBlack()) pairs.push([1, 7]);
+    if (getYellowGreen()) pairs.push([2, 3]);
+    if (getYellowBlue()) pairs.push([2, 4]);
+    if (getYellowPurple()) pairs.push([2, 5]);
+    if (getYellowPink()) pairs.push([2, 6]);
+    if (getYellowBlack()) pairs.push([2, 7]);
+    if (getGreenBlue()) pairs.push([3, 4]);
+    if (getGreenPurple()) pairs.push([3, 5]);
+    if (getGreenPink()) pairs.push([3, 6]);
+    if (getGreenBlack()) pairs.push([3, 7]);
+    if (getBluePurple()) pairs.push([4, 5]);
+    if (getBluePink()) pairs.push([4, 6]);
+    if (getBlueBlack()) pairs.push([4, 7]);
+    if (getPurplePink()) pairs.push([5, 6]);
+    if (getPurpleBlack()) pairs.push([5, 7]);
+    if (getPinkBlack()) pairs.push([6, 7]);
+    let c;
+    for (p of pairs) {
+        c = 0;
+        while (c < combos.length) {
+            if (combos[c].includes(p[0]) && combos[c].includes(p[1])) {
+                combos.splice(c, 1);
+            } else {
+                c++;
+            }
+        }
+    }
+    if (combos.length == 0) {
+        alert("Error calculating color assignments with given pairs to avoid.");
+        throw Error("Error calculating color assignments with given pairs to avoid.");
+    }
+
+    //If certain colors cannot be included, remove them from the list.
+    let removal = colors.slice(0);
+    for (c of combos) {
+        for (r of c) {
+            index = removal.indexOf(r);
+            if (index > -1) {
+                removal.splice(index, 1);
+            }
+        }
+    }
+    for (r of removal) {
+        index = colors.indexOf(r);
+        if (index > -1) {
+            colors.splice(index, 1);
+        }
+    }
+    if (colors.length < amount) {
+        alert("Error calculating color assignments with given pairs to avoid.");
+        throw Error("Error calculating color assignments with given pairs to avoid.");
+    }
+
+    //Create faction list.
+     let factions = new Array();
+     for (n of names) {
+         factions.push(faction(n));
+     }
+
+     //Generate random faction order.
+     let order = new Array();
+     let a;
+     let i = 0;
+     while (i < amount) {
+         a = getRandomNumber(amount);
+         if (!order.includes(a)) {
+             order.push(a);
+             i++;
+         }
+     }
+
+    //Add dummies to faction list.
+    while (factions.length < colors.length) {
+        order.push(factions.length);
+        factions.push(dummy());
+    }
+
     //Assign
+    //Initial assignment
     getAssignment();
-    if (combos.includes(true)) {
-        setCombos();
-    }
-    while (combos.includes(true)) {
-        excludeColors();
-        if (factions.length < amount) {
-            alert("Error calculating color assignments with given combos to avoid.");
-            throw Error("Error calculating color assignments with given combos to avoid.");
+
+    //Remove colors if part of pairs to avoid, then reassign
+    let remove = getColorToRemove();
+    while (remove > -1) {
+        //Remove dummy factions
+        for (let f of factions) {
+            f.envy.pop();
+        }
+        factions.pop();
+        order.pop();
+        //Remove color
+        index = colors.indexOf(remove);
+        colors.splice(index, 1);
+        if (colors.length < amount) {
+            alert("Error calculating color assignments with given pairs to avoid.");
+            throw Error("Error calculating color assignments with given pairs to avoid.");
         }
         getAssignment();
-        setCombos();
+        remove = getColorToRemove();
     }
+
     //Show results
     let color;
     for (let f = 0; f < names.length; f++) {
@@ -184,128 +272,43 @@ function assignColors() {
             envious = getSwitch(factions);
         }
     }
-    function setCombos() {
+    function getColorToRemove() {
         //Find used colors
-        let selected = new Array();
+        let c;
+        let selectedColors = new Array();
+        let selectedScores = new Array();
         for (let f = 0; f < amount; f++) {
-            selected.push(factions[f].color);
-        }
-        //Check combos
-        if (getRedOrange()) {
-            if (selected.includes(0) && selected.includes(1)) {
-                combos[0] = true;
-            } else {
-                combos[0] = false;
-            }
-        } if (getRedPink()) {
-            if (selected.includes(0) && selected.includes(6)) {
-                combos[1] = true;
-            } else {
-                combos[1] = false;
-            }
-        } if (getOrangeYellow()) {
-            if (selected.includes(1) && selected.includes(2)) {
-                combos[2] = true;
-            } else {
-                combos[2] = false;
-            }
-        } if (getBlueBlack()) {
-            if (selected.includes(4) && selected.includes(7)) {
-                combos[3] = true;
-            } else {
-                combos[3] = false;
-            }
-        } if (getPurplePink()) {
-            if (selected.includes(5) && selected.includes(6)) {
-                combos[4] = true;
-            } else {
-                combos[4] = false;
-            }
-        }
-    }
-    function excludeColors() {
-        //Find used colors
-        let selected = new Array();
-        for (let f = 0; f < amount; f++) {
-            selected.push(factions[f].color);
+            c = factions[f].color;
+            selectedColors.push(c);
+            selectedScores.push(Number(factions[f].scores[c]));
         }
         //Sort by color scores
-        let sorted = getSorted(factions.slice(0), selected.length - 1);
-        let found = false;
-        let s = 0;
-        if (combos.includes(true)) {
-            while (!found && s < sorted.length) {
-                chosenColor = sorted[s].color;
-                if (chosenColor == 0) {
-                    if (getRedOrange() && selected.includes(1)) {
-                        setColor(1);
-                        combos[0] = false;
-                        found = true;
+        [selectedColors, selectedScores] = getSorted(selectedColors.slice(0), selectedScores.slice(0), amount - 1);
+        //Check if any colors are to be removed
+        c = 0;
+        let i;
+        let j;
+        let removeColor = -1;
+        let removeScore = -1;
+        //For each color, starting with the highest scoring color, check if it is part of one of the pairs to avoid. If the color is part of multiple pairs, select the lowest scoring pairing color.
+        while (removeColor == -1 && c < amount) {
+            for (let p of pairs) {
+                i = p.indexOf(selectedColors[c]);
+                if (i > -1) {
+                    console.log(p);
+                    i = Math.abs(i - 1);
+                    j = selectedColors.indexOf(p[i]);
+                    if (j > -1 && (removeScore == -1 || removeScore > selectedScores[j])) {
+                        removeColor = selectedColors[j];
+                        removeScore = selectedScores[j];
+                        console.log(removeColor);
+                        console.log(removeScore);
                     }
-                    if (getRedPink() && selected.includes(6)) {
-                        setColor(6);
-                        combos[1] = false;
-                        found = true;
-                    }
-                } else if (chosenColor == 1) {
-                    if (getRedOrange() && selected.includes(0)) {
-                        setColor(0);
-                        combos[0] = false;
-                        found = true;
-                    }
-                    if (getOrangeYellow() && selected.includes(2)) {
-                        setColor(2);
-                        combos[2] = false;
-                        found = true;
-                    }
-                } else if (chosenColor == 2) {
-                    if (getOrangeYellow() && selected.includes(1)) {
-                        setColor(1);
-                        combos[2] = false;
-                        found = true;
-                    }
-                } else if (chosenColor == 4) {
-                    if (getBlueBlack() && selected.includes(7)) {
-                        setColor(7);
-                        combos[3] = false;
-                        found = true;
-                    }
-                } else if (chosenColor == 5) {
-                    if (getPurplePink() && selected.includes(6)) {
-                        setColor(6);
-                        combos[4] = false;
-                        found = true;
-                    }
-                } else if (chosenColor == 6) {
-                    if (getRedPink() && selected.includes(0)) {
-                        setColor(0);
-                        combos[1] = false;
-                        found = true;
-                    }
-                    if (getPurplePink() && selected.includes(5)) {
-                        setColor(5);
-                        combos[4] = false;
-                        found = true;
-                    }
-                } else if (chosenColor == 7) {
-                    if (getBlueBlack() && selected.includes(4)) {
-                        setColor(4);
-                        combos[3] = false;
-                        found = true;
-                    }
-                }
-                s++;
+                } 
             }
+            c++;
         }
-    }
-    function setColor(color) {
-        for (let f of factions) {
-            f.envy.pop();
-        }
-        factions.pop();
-        order.pop();
-        index = colors.indexOf(color);
-        colors.splice(index, 1);
+        return removeColor;
     }
 }
 
@@ -314,15 +317,104 @@ function getSpeaker() {
     return document.getElementById("speaker").checked;
 }
 
-//Get color combos to avoid
+//Get colors to exclude
+function getExcludeRed() {
+    return document.getElementById("exclred").checked;
+}
+function getExcludeOrange() {
+    return document.getElementById("exclora").checked;
+}
+function getExcludeYellow() {
+    return document.getElementById("exclyel").checked;
+}
+function getExcludeGreen() {
+    return document.getElementById("exclgre").checked;
+}
+function getExcludeBlue() {
+    return document.getElementById("exclblu").checked;
+}
+function getExcludePurple() {
+    return document.getElementById("exclpur").checked;
+}
+function getExcludePink() {
+    return document.getElementById("exclpin").checked;
+}
+function getExcludeBlack() {
+    return document.getElementById("exclbla").checked;
+}
+
+//Get color pairs to avoid
 function getRedOrange() {
     return document.getElementById("redora").checked;
+}
+function getRedYellow() {
+    return document.getElementById("redyel").checked;
+}
+function getRedGreen() {
+    return document.getElementById("redgre").checked;
+}
+function getRedBlue() {
+    return document.getElementById("redblu").checked;
+}
+function getRedPurple() {
+    return document.getElementById("redpur").checked;
 }
 function getRedPink() {
     return document.getElementById("redpin").checked;
 }
+function getRedBlack() {
+    return document.getElementById("redbla").checked;
+}
 function getOrangeYellow() {
     return document.getElementById("orayel").checked;
+}
+function getOrangeGreen() {
+    return document.getElementById("oragre").checked;
+}
+function getOrangeBlue() {
+    return document.getElementById("orablu").checked;
+}
+function getOrangePurple() {
+    return document.getElementById("orapur").checked;
+}
+function getOrangePink() {
+    return document.getElementById("orapin").checked;
+}
+function getOrangeBlack() {
+    return document.getElementById("orabla").checked;
+}
+function getYellowGreen() {
+    return document.getElementById("yelgre").checked;
+}
+function getYellowBlue() {
+    return document.getElementById("yelblu").checked;
+}
+function getYellowPurple() {
+    return document.getElementById("yelpur").checked;
+}
+function getYellowPink() {
+    return document.getElementById("yelpin").checked;
+}
+function getYellowBlack() {
+    return document.getElementById("yelbla").checked;
+}
+function getGreenBlue() {
+    return document.getElementById("greblu").checked;
+}
+function getGreenPurple() {
+    return document.getElementById("grepur").checked;
+}
+function getGreenPink() {
+    return document.getElementById("grepin").checked;
+}
+function getGreenBlack() {
+    return document.getElementById("grebla").checked;
+}
+function getBluePurple() {
+    return document.getElementById("blupur").checked;
+}
+function getBluePink() {
+    return document.getElementById("blupin").checked;
 }
 function getBlueBlack() {
     return document.getElementById("blubla").checked;
@@ -330,7 +422,14 @@ function getBlueBlack() {
 function getPurplePink() {
     return document.getElementById("purpin").checked;
 }
+function getPurpleBlack() {
+    return document.getElementById("purbla").checked;
+}
+function getPinkBlack() {
+    return document.getElementById("pinbla").checked;
+}
 
+//Generate faction
 function faction(name) {
     let expansion;
     let scores = new Array();
@@ -357,10 +456,11 @@ function faction(name) {
     return fac;
 }
 
+//Generate dummy faction
 function dummy(exp) {
     const dummy = {
         name: "Dummy",
-        expansion: exp,
+        expansion: "dummy",
         scores: [-100, -100, -100, -100, -100, -100, -100, -100],
         color: -1,
         envy: [0, 0, 0, 0, 0, 0, 0, 0]
@@ -402,20 +502,23 @@ function getSwitch(factions) {
     }
 }
 
-function getSorted(list, n) {
-    let i,l;
+//Sort list
+function getSorted(colorsList, scoresList, n) {
+    let i, c, s;
     if (n > 0) {
-        getSorted(list, n - 1);
-        l = list[n];
+        getSorted(colorsList, scoresList, n - 1);
+        c = colorsList[n];
+        s = scoresList[n];
         i = n - 1;
-        while (i >= 0 && list[i].scores[list[i].color] < l.scores[l.color]) {
-        //while (i >= 0 && list[i] < l) {
-            list[i + 1] = list[i];
+        while (i >= 0 && scoresList[i] < s) {
+            colorsList[i + 1] = colorsList[i];
+            scoresList[i + 1] = scoresList[i];
             i--;
         }
-        list[i + 1] = l;
+        colorsList[i + 1] = c;
+        scoresList[i + 1] = s;
     }
-    return list;
+    return [colorsList,scoresList];
 }
 
 //Gets color name
