@@ -15,8 +15,60 @@
         <a href="/"><h1>Twilight Imperium 4th Edition Color Assigner</h1></a>
     </header>
     <main>
+        <section class="options">
+            <h3><a href="#about">About</a></h3>
+            <h3><a href="#options">Options</a></h3>
+            <ul>
+                <li><a href="#expansions">Expansions</a></li>
+                <li><a href="#speaker">Speaker token</a></li>
+                <li><a href="#exclude">Exclude colors</a></li>
+                <li><a href="#avoid">Avoid color combos</a></li>
+            </ul>
+            <h3><a href="#functionality">Functionality</a></h3>
+            <ul>
+                <li><a href="#randomizer">Faction randomizer</a></li>
+                <li><a href="#assigner">Color assigner</a></li>
+                <li><a href="#scores">Scores</a></li>
+            </ul>
+            <h3><a href="#algorithm">Color assignment</a></h3>
+        </section>
         <div class="content">
-            <h2>About</h2>
+            <h2><a id="about">About</a></h2>
+            <p>If you're like me, when hosting Twilight Imperium games, you like assigning colors to players based on the faction they've chosen. Clearly, if someone plays Arborec, they have to be green! But what if you're playing a game with the Sardakk N'orr, the Nekro Virus, the Barony of Letnev, the Embers of Muaat, and the L1Z1X Mindnet, all of whom have red/black tokens? Well, this website is for you!</p>
+            <p>Twilight Imperium 4th Edition Color Assigner (TICA) assigns colors to players based on which colors best match their factions. Each faction has a score for each color, and the program attempts to maximize that score to find the best possible color combination. If you disagree with the scores I've assigned, don't worry, you can enter custom color scores!</p>
+            <p>TICA was first created as a Python application in 2019 and was rewritten into a web application with Javascript in 2022, with support for the Prophecy of Kings expansion and additional functionality for excluding colors and avoiding color combinations.</p>
+
+            <h2><a id="options">Options</a></h2>
+            <h3><a id="expansions">Expansions</a></h3>
+            <p>If you have an expansion, you can check the box for the expansion here. Content from unchecked expansions is hidden. All expansions are checked by default.</p>
+            <h3><a id="speaker">Speaker token</a></h3>
+            <p>Check the box if you want to assign the speaker token to a random player.</p>
+            <h3><a id="exclude">Exclude colors</a></h3>
+            <p>If there are any colors you would like to exclude - for example, if you find them hard to see on the board - you can check their box, and they will be excluded from the color assignment.</p>
+            <h3><a id="avoid">Avoid color combos</a></h3>
+            <p>If there are any combinations of colors you would like to avoid - for example, if a player is colorblind - you can check their box, and the they will be avoidded during color assignment. For example, if you check the box for Red and Green, then red or green may be assigned, but never both at the same time.</p>
+
+            <h2><a id="functionality">Functionality</a></h2>
+            <h3><a id="randomizer">Faction randomizer</a></h3>
+            <p>Enter a number and press the "Randomize" button. That number of factions will be randomly selected.</p>
+            <h3><a id="assigner">Color assigner</a></h3>
+            <p>Pressing "Assign colors" will assign colors to the selected factions based on which colors match them best. Due to the way the algorithm is written, pressing the button multiple times may give different results. See below for details on how the color assigner works.</p>
+            <h3><a id="scores">Scores</a></h3>
+            <p>
+                Scores have been assigned based on these criteria:
+                <ul>
+                    <li>8 points: Signature color. The color generally associated with the faction.</li>
+                    <li>6 points: Preferred color. A significant color on the faction sheet and/or control tokens.</li>
+                    <li>4-5 points: Liked color. The color appears on the faction sheet and/or control tokens.</li>
+                    <li>1-2 points: Slightly liked color. The color has some association with the faction, or has no association but is complimentary or otherwise somewhat pleasing.</li>
+                    <li>0 points: The color has no association with the faction and does not match well with the faction sheet and/or command tokens.</li>
+                </ul>
+                Scores can be edited. They will revert to default scores if the page is refreshes, but you may export your custom scores and import them later.
+            </p>
+            <p>To export scores, press the "Export" button and copy and paste the text from the popup into a text editor such as Notepad. Save the file somewhere for future use.</p>
+            <p>To import scores, press the "Import" button and copy and paste the previously saved text string into the popup and press "OK".</p>
+
+            <h2><a id="algorithm">Color assignment</a></h2>
         </div>
     </main>
     <footer>

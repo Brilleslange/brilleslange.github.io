@@ -45,7 +45,6 @@ function importScores() {
             throw Error("Invalid import.");
         }
     }
-    console.log(factions);
     setScores(factions);
 }
 
@@ -62,7 +61,7 @@ function exportScores() {
             }
         }
     }
-    alert("Copy this text into a text editor (such as Notepad):\n" + text);
+    prompt("Copy this text into a text editor (such as Notepad):",text);
 }
 
 function defaultScores() {
