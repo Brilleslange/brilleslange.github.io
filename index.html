@@ -26,6 +26,11 @@
             <input type="checkbox" id="pok" onclick="setPok()" checked /><label for="pok">Prophecy of Kings</label>
             <h3>Speaker token</h3>
             <input type="checkbox" id="speaker" /><label for="speaker">Assign speaker</label>
+            <h3>Assignment mode</h3>
+            <ul id="modes">
+                <li><input type="radio" id="minenv" value="minenv" name="mode" checked /><label for="minenv">Minimize envy (faster)</label></li>
+                <li><input type="radio" id="maxsco" value="maxsco" name="mode"         /><label for="maxsco">Maximize total score</label></li>
+            </ul>
             <h3>Exclude colors</h3>
             <ul>
                 <li><input type="checkbox" id="exclred" name="exclude" /><label for="exclred">Red</label></li>
@@ -150,7 +155,7 @@
                         </tr>
                     </table>
                     <ul class="buttons">
-                        <li><button onclick="assignColors()">Assign colors</button></li>
+                        <li><button id="assignButton" onclick="assignColors()">Assign colors</button></li>
                     </ul>
                 </div>
                 <hr />
